@@ -1,0 +1,1 @@
+docker exec -it reefscan-controller /control-interactive.sh
