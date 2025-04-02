@@ -1,3 +1,23 @@
+Fork of https://github.com/alliedvision/vimbax_ros2_driver
+Modified by Greg Coleman of AIMS to give access to exposure time and gain through the camera_info topic
+
+Also added some code for building a docker container for testing
+
+build docker container
+```
+./docker-build.sh
+```
+run docker container
+```
+./docker/docker-run.sh
+```
+bash in to a running cotainer
+```
+./docker/bashin.sh
+```
+
+see docker/commands for some useful commands to execute within the docker container 
+
 # Vimba X ROS 2 camera driver
 
 ## Compability

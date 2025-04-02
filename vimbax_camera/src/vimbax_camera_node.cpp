@@ -1619,12 +1619,19 @@ result<void> VimbaXCameraNode::start_streaming()
 
       auto const camera_info = [&] {
         auto const loaded_info = camera_info_manager_->getCameraInfo();
-
-        if (loaded_info.width != frame->width || loaded_info.height != frame->height) {
-          return sensor_msgs::msg::CameraInfo{}.set__width(frame->width).set__height(frame->height);
-        }
-
-        return loaded_info;
+        auto const feature_module = VimbaXCamera::Module::RemoteDevice;
+/*  Change below by Greg Coleman. AIMS.
+    Previously there was no way to see the current values for Gain and Exposure Time
+    I am trying not to change to much because my C++ skills are limited
+    So I am writing Exposure Time to roi_width and Gain to roi_height
+    This is consistent with what Geoff Page did for the ROS1 driver
+*/
+        auto message = sensor_msgs::msg::CameraInfo{}.set__width(frame->width).set__height(frame->height);
+        auto exposure = camera_->feature_float_get("ExposureTime", feature_module);
+        auto gain = camera_->feature_float_get("Gain", feature_module);
+        message.roi.width=*exposure;
+        message.roi.height=*gain;
+        return message;
       }().set__header(frame->header);
 
 
