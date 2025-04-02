@@ -53,7 +53,6 @@ COPY        vimbax_camera_events /root/ros2_ws/src/vimbax_camera_events
 COPY        vimbax_camera_examples /root/ros2_ws/src/vimbax_camera_examples
 COPY        vimbax_camera_msgs /root/ros2_ws/src/vimbax_camera_msgs
 COPY        vmbc_interface /root/ros2_ws/src/vmbc_interface
-COPY        docker/scripts/ /root/scripts
 WORKDIR     /root/ros2_ws
 RUN         rosdep install --from-path src --ignore-src -y
 RUN         /bin/bash -c "source /opt/ros/humble/setup.bash; colcon build"
