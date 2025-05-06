@@ -87,6 +87,9 @@ def main():
 
     request = service_type.Request()
     request.feature_module = get_module_from_string(args.module)
+
+    print(topic)
+    print(request)
     response = single_service_call(node, service_type, topic, request)
 
     if response.error.code == 0:

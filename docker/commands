@@ -1,0 +1,8 @@
+. /ros.sh
+ros2 run vimbax_camera vimbax_camera_node
+ros2 topic list
+ros2 topic echo /vimbax_camera_65/camera_info
+ros2 run vimbax_camera_examples list_features vimbax_camera_65 | grep Exposure
+ros2 run vimbax_camera_examples feature_get vimbax_camera_65 Float ExposureTime
+ros2 run vimbax_camera_examples feature_get vimbax_camera_65 Enum ExposureAuto
+ros2 run vimbax_camera_examples feature_set vimbax_camera_65 Enum ExposureAuto Continuous
