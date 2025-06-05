@@ -1,22 +1,27 @@
-FROM        ros:humble
+FROM        ros:humble-ros-base
 
 ENV         PYTHONDONTWRITEBYTECODE=true
 
+SHELL ["/bin/bash", "-c"]
+
 # Copy the locally downloaded Vimba package, there is no direct access link for download, from
 # https://www.alliedvision.com/en/products/software.html
-COPY        ../vimba/VimbaX_Setup-2024-1-Linux64.tar.gz /
 
-SHELL ["/bin/bash", "-c"] 
+
+RUN apt-get update && apt-get install -y python3-pip \
+ && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN         apt-get update
 RUN         apt-get install -y
+
+RUN apt-get install wget
+RUN wget https://downloads.alliedvision.com/VimbaX/VimbaX_Setup-2024-1-Linux_ARM64.tar.gz
+
 RUN         apt-get install python3-rosdep -y
-RUN         apt-get install python3-opencv -y
-RUN         apt-get install python3-pip -y
 RUN         apt-get install ros-humble-cv-bridge -y
 RUN         apt-get install python3-colcon-common-extensions -y
 RUN         apt-get install ros-humble-ament-cmake-clang-format -y
-RUN         tar -xzf VimbaX_Setup-2024-1-Linux64.tar.gz -C /opt
+RUN         tar -xzf VimbaX_Setup-2024-1-Linux_ARM64.tar.gz -C /opt
 RUN         mv /opt/VimbaX_2024-1 /opt/VimbaX
 
 # Create the udev rules directory (needed by the GenTL installation script),
@@ -46,8 +51,8 @@ RUN         apt-get install ros-humble-rmw-cyclonedds-cpp -y
 RUN         apt-get install libgl1 -y
 
 RUN         mkdir -p /root/ros2_ws/src/
-COPY        docker/run.sh .
-COPY        docker/ros.sh .
+COPY        docker/run.sh /
+COPY        docker/ros.sh /
 COPY        vimbax_camera /root/ros2_ws/src/vimbax_camera
 COPY        vimbax_camera_events /root/ros2_ws/src/vimbax_camera_events
 COPY        vimbax_camera_examples /root/ros2_ws/src/vimbax_camera_examples
@@ -57,4 +62,4 @@ WORKDIR     /root/ros2_ws
 RUN         rosdep install --from-path src --ignore-src -y
 RUN         /bin/bash -c "source /opt/ros/humble/setup.bash; colcon build"
 
-#ENTRYPOINT  ["/run.sh"]
+ENTRYPOINT  ["/run.sh"]
