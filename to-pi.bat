@@ -1,0 +1,1 @@
+scp -r [!.]* reefscan@192.168.3.11:~/greg/vimba_driver
